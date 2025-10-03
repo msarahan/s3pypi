@@ -231,6 +231,33 @@ $ python setup.py sdist bdist_wheel
 $ s3pypi upload dist/* --bucket example-bucket [--prefix PREFIX]
 ```
 
+#### Index Format Options
+
+S3PyPI supports both HTML-based (PEP 503) and JSON-based (PEP 691) package indexes:
+
+- **HTML indexes** (default): Traditional format compatible with all pip versions
+- **JSON indexes**: Modern format offering better machine readability and multiple hash support
+
+```console
+# Generate only HTML indexes (default behavior)
+$ s3pypi upload dist/* --bucket example-bucket
+
+# Generate only JSON indexes (PEP 691)
+$ s3pypi upload dist/* --bucket example-bucket --index.json
+
+# Generate both HTML and JSON indexes
+$ s3pypi upload dist/* --bucket example-bucket --index.html --index.json
+
+# Use custom JSON API version
+$ s3pypi upload dist/* --bucket example-bucket --index.json --json-api-version 1.0
+```
+
+**Benefits of JSON indexes:**
+- More efficient parsing for automated tools
+- Support for multiple hash algorithms per file
+- Structured metadata format
+- Better forward compatibility
+
 See `s3pypi --help` for a description of all options.
 
 

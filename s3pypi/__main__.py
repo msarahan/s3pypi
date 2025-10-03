@@ -105,6 +105,21 @@ def build_s3_args(p: ArgumentParser) -> None:
         ),
     )
     p.add_argument(
+        "--index.json",
+        dest="index_json",
+        action="store_true",
+        help=(
+            "Generate PEP 691 JSON index files alongside or instead of HTML indexes. "
+            "JSON indexes provide better machine readability and support multiple hashes."
+        ),
+    )
+    p.add_argument(
+        "--json-api-version",
+        dest="json_api_version",
+        default="1.0",
+        help="JSON API version for PEP 691 indexes (default: 1.0).",
+    )
+    p.add_argument(
         "--locks-table",
         metavar="TABLE",
         help="DynamoDB table to use for locking (default: `<bucket>-locks`).",
@@ -143,6 +158,8 @@ def main(*raw_args: str) -> None:
             endpoint_url=args.s3_endpoint_url,
             put_kwargs=args.s3_put_args,
             index_html=args.index_html,
+            index_json=getattr(args, "index_json", False),
+            json_api_version=getattr(args, "json_api_version", "1.0"),
             locks_table=args.locks_table,
         )
         if hasattr(args, "bucket")
